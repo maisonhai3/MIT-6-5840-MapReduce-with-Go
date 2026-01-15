@@ -1,5 +1,9 @@
 {
     "chat.tools.terminal.autoApprove": {
-        "go": true
+        "go": true,
+        "/^cd /home/mai\\.son\\.hai@sun-asterisk\\.com/GolandProjects/6\\.5840-golabs-2025/src/main && bash test-mr\\.sh$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     }
 }
