@@ -31,9 +31,9 @@ type Coordinator struct {
 	mu sync.Mutex // Protects shared state
 
 	// Map task tracking
-	mapTasks    []TaskInfo // State of each map task
-	nMap        int        // Total number of map tasks
-	mapDone     int        // Count of completed map tasks
+	mapTasks []TaskInfo // State of each map task
+	nMap     int        // Total number of map tasks
+	mapDone  int        // Count of completed map tasks
 
 	// Reduce task tracking
 	reduceTasks []TaskInfo // State of each reduce task
@@ -161,12 +161,6 @@ func (c *Coordinator) ReportTask(args *ReportTaskArgs, reply *ReportTaskReply) e
 		}
 	}
 
-	return nil
-}
-
-// Example is an example RPC handler (kept for compatibility).
-func (c *Coordinator) Example(args *ExampleArgs, reply *ExampleReply) error {
-	reply.Y = args.X + 1
 	return nil
 }
 

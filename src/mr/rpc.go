@@ -1,28 +1,7 @@
 package mr
 
-//
-// RPC definitions.
-//
-// remember to capitalize all names.
-//
-
 import "os"
 import "strconv"
-
-//
-// example to show how to declare the arguments
-// and reply for an RPC.
-//
-
-type ExampleArgs struct {
-	X int
-}
-
-type ExampleReply struct {
-	Y int
-}
-
-// Add your RPC definitions here.
 
 // TaskType represents the type of task assigned to a worker.
 type TaskType int
@@ -34,6 +13,7 @@ const (
 	ExitTask                   // 3: All tasks done, worker should exit
 )
 
+// ---- GET TASKS ---
 // GetTaskArgs is used by the worker to request a task from the coordinator.
 type GetTaskArgs struct {
 	WorkerID int // Optional: for debugging/logging purposes
@@ -41,14 +21,15 @@ type GetTaskArgs struct {
 
 // GetTaskReply contains the task information sent by the coordinator.
 type GetTaskReply struct {
-	TaskType   TaskType // Type of task (Map, Reduce, Wait, Exit)
-	TaskID     int      // Unique ID for this task
-	InputFile  string   // For Map: the input filename
-	NReduce    int      // Total number of reduce tasks (for Map to partition)
-	NMap       int      // Total number of map tasks (for Reduce to find intermediates)
-	ReduceID   int      // For Reduce: which reduce partition to process
+	TaskType  TaskType // Type of task (Map, Reduce, Wait, Exit)
+	TaskID    int      // Unique ID for this task
+	InputFile string   // For Map: the input filename
+	NReduce   int      // Total number of reduce tasks (for Map to partition)
+	NMap      int      // Total number of map tasks (for Reduce to find intermediates)
+	ReduceID  int      // For Reduce: which reduce partition to process
 }
 
+// ---- REPORT TASKS ---
 // ReportTaskArgs is used by the worker to report task completion.
 type ReportTaskArgs struct {
 	TaskType TaskType // Type of task completed (Map or Reduce)

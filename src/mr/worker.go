@@ -217,20 +217,6 @@ func executeReduceTask(task GetTaskReply, reducef func(string, []string) string)
 	reportTask(ReduceTask, task.TaskID, true)
 }
 
-// CallExample shows how to make an RPC call to the coordinator.
-func CallExample() {
-	args := ExampleArgs{}
-	args.X = 99
-	reply := ExampleReply{}
-
-	ok := call("Coordinator.Example", &args, &reply)
-	if ok {
-		fmt.Printf("reply.Y %v\n", reply.Y)
-	} else {
-		fmt.Printf("call failed!\n")
-	}
-}
-
 // call sends an RPC request to the coordinator, wait for the response.
 // usually returns true.
 // returns false if something goes wrong.
