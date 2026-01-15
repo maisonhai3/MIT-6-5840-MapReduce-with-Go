@@ -109,9 +109,10 @@ func executeMapTask(task GetTaskReply, mapf func(string, string) []KeyValue) {
 	// Write each bucket to an intermediate file
 	for reduceID, bucket := range buckets {
 		// Create a temporary file for atomic write (in current dir to allow atomic rename)
-		tempFile, err := ioutil.TempFile(".", "mr-map-tmp-*")
+		tempFile, err := os.CreateTemp(".", "mr-map-tmp-*")
 		if err != nil {
 			log.Printf("cannot create temp file: %v", err)
+
 			reportTask(MapTask, task.TaskID, false)
 			return
 		}
@@ -121,8 +122,10 @@ func executeMapTask(task GetTaskReply, mapf func(string, string) []KeyValue) {
 		for _, kv := range bucket {
 			if err := enc.Encode(&kv); err != nil {
 				log.Printf("cannot encode kv: %v", err)
+
 				tempFile.Close()
 				os.Remove(tempFile.Name())
+
 				reportTask(MapTask, task.TaskID, false)
 				return
 			}
@@ -133,7 +136,9 @@ func executeMapTask(task GetTaskReply, mapf func(string, string) []KeyValue) {
 		finalName := fmt.Sprintf("mr-%d-%d", task.TaskID, reduceID)
 		if err := os.Rename(tempFile.Name(), finalName); err != nil {
 			log.Printf("cannot rename temp file: %v", err)
+
 			os.Remove(tempFile.Name())
+
 			reportTask(MapTask, task.TaskID, false)
 			return
 		}
@@ -172,7 +177,7 @@ func executeReduceTask(task GetTaskReply, reducef func(string, []string) string)
 	sort.Sort(ByKey(intermediate))
 
 	// Create a temporary output file (in current dir to allow atomic rename)
-	tempFile, err := ioutil.TempFile(".", "mr-reduce-tmp-*")
+	tempFile, err := os.CreateTemp(".", "mr-reduce-tmp-*")
 	if err != nil {
 		log.Printf("cannot create temp file: %v", err)
 		reportTask(ReduceTask, task.TaskID, false)
